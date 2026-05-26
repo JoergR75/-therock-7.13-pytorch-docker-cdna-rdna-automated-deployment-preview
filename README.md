@@ -116,45 +116,6 @@ Expected Output Example:
 
 <img width="1432" height="724" alt="image" src="https://github.com/user-attachments/assets/79d17eb1-bf35-4807-9ffe-05337e9a279a" />
 
-## 📶 ROCm Bandwidth Test
-
-**AMD’s ROCm Bandwidth Test utility** with the **`tb p2p` (Peer-to-peer device memory bandwidth test)** flag runs a complete set of bandwidth diagnostics.
-
-### What it does
-
-`rocm-bandwidth-test` is a diagnostic tool included in ROCm that measures **memory bandwidth performance** between:
-
-- Host (CPU) ↔ GPU(s)  
-- GPU ↔ GPU (if multiple GPUs are installed)  
-- GPU internal memory  
-
-### `tb p2p` option
-
-Using the `--run tb p2p` flag runs **Peer-to-peer device memory bandwidth test**, including:
-
-- **Host-to-Device (H2D)** bandwidth  
-- **Device-to-Host (D2H)** bandwidth  
-- **Device-to-Device (D2D)** bandwidth (for multi-GPU)  
-- **Bidirectional / concurrent** bandwidth tests  
-
-Run the P2P test
-```bash
-cd /opt/rocm/bin && ./rocm_bandwidth_test plugin --run tb p2p
-```
-
-### Output
-
-The tool prints results in a **matrix format** showing bandwidth (GB/s) between every device pair.
-
-<img width="983" height="1179" alt="{6EAC522F-550D-4881-9C78-11B3A90A555D}" src="https://github.com/user-attachments/assets/039f0f87-79b8-4dd0-856b-d959025b27a4" />
-
-More details about the setup can be verified by
-```bash
-cd /opt/rocm/bin && ./rocm_bandwidth_test plugin --run tb
-```
-
-<img width="861" height="275" alt="{4103D9C7-2ECE-42CF-A231-DC1D7004C7BF}" src="https://github.com/user-attachments/assets/e0a1efaf-9c5c-4c6c-b2d9-8ff14cf1b623" />
-
 ⚠️ **Caution:**  
 Make sure **"Re-Size BAR"** is enabled in the **SBIOS**.  
 If it is disabled, **P2P** will be deactivated, as shown below:
