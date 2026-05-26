@@ -58,7 +58,7 @@ function print () {
 }
 
 clear &&
-printf '\n🚀 TheRock 7.13 + PyTorch 2.11 (Stable) + Transformers + Docker Setup\nCompatible with Ubuntu 22.04.x, 24.04.x and 26.04.x (Desktop & Server)\n ⚠️ Ubuntu 20.04.x is no longer supported'
+printf '\n🚀 AMD TheRock 7.13 + PyTorch 2.11 (Stable) + Transformers + Docker Setup\nCompatible with Ubuntu 22.04.x, 24.04.x and 26.04.x (Desktop & Server)\n ⚠️ Ubuntu 20.04.x is no longer supported'
 print '\n 🔄 Ubuntu OS Update ...\n'
 
 sudo apt-get update
@@ -440,8 +440,8 @@ if __name__ == "__main__":
     print(get_total_memory_gb())
 
 print("\n ✅ PyTorch version:", torch.__version__)
-print(" 🧪 ROCm version:", subprocess.getoutput("/opt/rocm/bin/hipconfig --version"))
-print(" ✅ Is ROCm available:", torch.version.hip is not None)
+print(" 🧪 TheRock version:", subprocess.getoutput("/opt/rocm/bin/hipconfig --version"))
+print(" ✅ Is TheRock available:", torch.version.hip is not None)
 print(" 🤗 Transformers version:", transformers.__version__)
 print("\n ⚡ Number of GPUs:", torch.cuda.device_count())
 
@@ -511,15 +511,13 @@ else
 fi
 
 # Final installation message
-print ' ✅ Finished TheRock 7.13 + OCL 2.x + PyTorch 2.11 (Stable) + Transformers environment installation and setup.\n'
+print ' ✅ Finished TheRock 7.13 + PyTorch 2.11 (Stable) + Transformers & Docker environment installation and setup.\n'
 
 # Post-reboot testing instructions
 printf "\n 🔹 After the reboot, test your installation with:\n"
 printf "  • rocminfo\n"
 printf "  • installation process is stored in $HOME/installation.log\n"
-printf "  • rocm-smi\n"
 printf "  • amd-smi\n"
-printf "  • rocm-bandwidth-tool\n"
 
 # PyTorch verification
 printf "\n 🔹 Verify the active PyTorch device:\n"
@@ -527,15 +525,8 @@ printf "  - python3 test.py\n"
 
 # vLLM Docker images for RDNA4 and CDNA1/2/3/4
 printf "\n 🔹 Install the latest vLLM Docker images:\n"
-printf "  - RDNA4 → sudo docker pull rocm/vllm-dev:rocm7.2.1_navi_ubuntu24.04_py3.12_pytorch_2.9_vllm_0.16.0\n"
+printf "  - RDNA4 → sudo docker pull rocm/vllm:rocm7.13.0_gfx120X-all_ubuntu24.04_py3.13_pytorch_2.10.0_vllm_0.19.1\n"
 printf "  - CDNA → sudo docker pull rocm/vllm:latest\n"
-
-# Run the Docker container
-printf "\n 🔹 Start the vLLM Docker container:\n"
-printf "  - sudo docker run -it --device=/dev/kfd --device=/dev/dri \\
-    --security-opt seccomp=unconfined --group-add video rocm/vllm-dev:rocm7.2.1_navi_ubuntu24.04_py3.12_pytorch_2.9_vllm_0.16.0\n"
-
-printf "\nThe container will run using the image 'rocm/vllm-dev:rocm7.2.1_navi_ubuntu24.04_py3.12_pytorch_2.9_vllm_0.16.0', with flags enabling AMD GPU access via ROCm.\n\n"
 
 # reboot option
 print ' 🔄 Reboot system now (recommended)? (y/n)'
