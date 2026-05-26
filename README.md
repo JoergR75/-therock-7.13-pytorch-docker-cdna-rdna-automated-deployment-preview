@@ -64,7 +64,7 @@ Install **Ubuntu 22.04.5 LTS**, **Ubuntu 24.04.4 LTS** or **Ubuntu 26.04 LTS** (
   - On a fresh Ubuntu installation, the script automatically skips the deinstallation routine, as illustrated below
     <img width="543" height="160" alt="image" src="https://github.com/user-attachments/assets/3492a5e6-86f8-4b01-88fa-509f54db0f0e" />
   - If an existing version is detected, it will be deleted, regardless of whether it is the same or an older release.
-    <img width="590" height="298" alt="image" src="https://github.com/user-attachments/assets/6323bb70-5f3e-46d3-bf40-e8949d05c5a8" />
+    <img width="1739" height="607" alt="image" src="https://github.com/user-attachments/assets/7d618bd5-c910-4118-b1b4-a332af4ee152" />
 
 - SBIOS settings:
   - When using Linux, you should disable Secure Boot
