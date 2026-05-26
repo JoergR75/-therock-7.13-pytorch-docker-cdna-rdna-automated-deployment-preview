@@ -116,13 +116,6 @@ Expected Output Example:
 
 <img width="1432" height="724" alt="image" src="https://github.com/user-attachments/assets/79d17eb1-bf35-4807-9ffe-05337e9a279a" />
 
-More details about the ROCm driver version can be reviewed:
-```bash
-apt show rocm-libs -a
-```
-
-<img width="2508" height="717" alt="image" src="https://github.com/user-attachments/assets/6ade4a74-deea-4c4e-932d-b3e82bdc8d10" />
-
 ## 📶 ROCm Bandwidth Test
 
 **AMD’s ROCm Bandwidth Test utility** with the **`tb p2p` (Peer-to-peer device memory bandwidth test)** flag runs a complete set of bandwidth diagnostics.
@@ -208,7 +201,7 @@ Use the container image you need.
 
 **RDNA4** architecture running on Ubuntu 24.04
 ```bash
-docker pull vllm/vllm-openai-rocm:v0.20.1
+docker pull rocm/vllm:rocm7.13.0_gfx120X-all_ubuntu24.04_py3.13_pytorch_2.10.0_vllm_0.19.1
 ```
 
 <img width="763" height="590" alt="image" src="https://github.com/user-attachments/assets/7e13abbb-73c4-4d95-9204-2f240837c625" />
@@ -229,7 +222,7 @@ sudo docker run -it \
     --security-opt seccomp=unconfined \
     --group-add video \
     --entrypoint /bin/bash \
-    vllm/vllm-openai-rocm:v0.20.1
+    rocm/vllm:rocm7.13.0_gfx120X-all_ubuntu24.04_py3.13_pytorch_2.10.0_vllm_0.19.1
 ```
 
 <img width="618" height="124" alt="image" src="https://github.com/user-attachments/assets/fa7e620f-d082-4c0e-802b-a3be7f9fbab7" />
