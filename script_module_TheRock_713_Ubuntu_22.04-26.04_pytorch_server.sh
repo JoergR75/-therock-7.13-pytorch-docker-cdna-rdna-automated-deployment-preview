@@ -2,7 +2,7 @@
 LOGFILE="$HOME/installation.log"
 exec > >(tee -a "$LOGFILE") 2>&1
 # ================================================================================================================
-# TheRock 7.13 + OpenCL 2.x + PyTorch 2.11 (Stable) + Transformers + Docker Setup
+# TheRock 7.13 + PyTorch 2.11 (Stable) + Transformers + Docker Setup
 # Compatible with Ubuntu 22.04.x, 24.04.x and 26.04.x (Desktop & Server) — Ubuntu 20.04.x is no longer supported
 # ================================================================================================================
 # Description:
@@ -58,7 +58,7 @@ function print () {
 }
 
 clear &&
-printf '\n🚀 TheRock 7.13 + OpenCL 2.x + PyTorch 2.11 (Stable) + Transformers + Docker Setup\nCompatible with Ubuntu 22.04.x, 24.04.x and 26.04.x (Desktop & Server)\n ⚠️ Ubuntu 20.04.x is no longer supported'
+printf '\n🚀 TheRock 7.13 + PyTorch 2.11 (Stable) + Transformers + Docker Setup\nCompatible with Ubuntu 22.04.x, 24.04.x and 26.04.x (Desktop & Server)\n ⚠️ Ubuntu 20.04.x is no longer supported'
 print '\n 🔄 Ubuntu OS Update ...\n'
 
 sudo apt-get update
