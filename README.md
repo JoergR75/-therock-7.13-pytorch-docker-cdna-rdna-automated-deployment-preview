@@ -114,7 +114,7 @@ python3 test.py
 ```
 Expected Output Example:
 
-| 26.04 | 24.04.4 |
+| Ubuntu 26.04 LTS | Ubuntu 24.04.4 LTS |
 |--------|--------|
 | ![](https://github.com/user-attachments/assets/efc5c5db-3bf1-4f75-b244-f8b605adb650) | ![](https://github.com/user-attachments/assets/c237b408-3ab1-4d37-9ee1-2f8ab24a82c4) |
 
