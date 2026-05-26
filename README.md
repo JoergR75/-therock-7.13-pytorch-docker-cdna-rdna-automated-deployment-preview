@@ -60,7 +60,7 @@ Install **Ubuntu 22.04.5 LTS**, **Ubuntu 24.04.4 LTS** or **Ubuntu 26.04 LTS** (
 - Use a fresh Ubuntu installation if possible
 - Assign the full storage capacity during installation
 - Install **OpenSSH** for remote SSH management
-- The script automatically checks the system for installed versions of ROCm, PyTorch, and Docker, and removes them if found
+- The script automatically checks the system for installed versions of ROCm/TheRock, PyTorch, and Docker, and removes them if found
   - On a fresh Ubuntu installation, the script automatically skips the deinstallation routine, as illustrated below
     <img width="543" height="160" alt="image" src="https://github.com/user-attachments/assets/3492a5e6-86f8-4b01-88fa-509f54db0f0e" />
   - If an existing version is detected, it will be deleted, regardless of whether it is the same or an older release.
