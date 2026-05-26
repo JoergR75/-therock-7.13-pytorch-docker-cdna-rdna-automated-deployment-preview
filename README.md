@@ -177,15 +177,11 @@ sudo docker run -it \
     rocm/vllm:rocm7.13.0_gfx120X-all_ubuntu24.04_py3.13_pytorch_2.10.0_vllm_0.19.1
 ```
 
-<img width="618" height="124" alt="image" src="https://github.com/user-attachments/assets/fa7e620f-d082-4c0e-802b-a3be7f9fbab7" />
+<img width="1851" height="290" alt="image" src="https://github.com/user-attachments/assets/8a16798d-8ffb-4420-bc2a-135b27428b50" />
 
-With `rocm-smi`, you can verify all available GPUs (in this case, 2× Radeon AI PRO R9700 GPUs).
+With `amd-smi`, you can verify all available GPUs (in this case, 2× Radeon AI PRO R9700 GPUs).
 
-<img width="812" height="198" alt="image" src="https://github.com/user-attachments/assets/56102532-45d9-4d4a-a400-17f86aaefed7" />
-
-or `amd-smi`
-
-<img width="625" height="334" alt="image" src="https://github.com/user-attachments/assets/23fdac90-720b-4ab8-9d50-b2e67bd90cf5" />
+<img width="1651" height="751" alt="image" src="https://github.com/user-attachments/assets/ffe16b16-07ab-425b-97ba-11f7269080d2" />
 
 If you need to add a specific GPU, you can use the **passthrough** option.  
 First, verify the available GPUs in the `/dev/dri` directory (host).
@@ -193,7 +189,7 @@ First, verify the available GPUs in the `/dev/dri` directory (host).
 cd /dev/dri && ls
 ```
 
-<img width="460" height="49" alt="image" src="https://github.com/user-attachments/assets/84b7c3b5-5a54-4132-8d87-9a16ad9ef337" />
+<img width="1368" height="95" alt="image" src="https://github.com/user-attachments/assets/f219bd3f-5626-4935-a4fd-5f08774a4e76" />
 
 Let's choose **GPU2**, also referred to as **"card2"** or **"renderD129"**.
 ```bash
@@ -203,7 +199,7 @@ sudo docker run -it \
     --device=/dev/dri/renderD129 \
     --security-opt seccomp=unconfined \
     --group-add video \
-    vllm/vllm-openai-rocm:v0.20.1
+    rocm/vllm:rocm7.13.0_gfx120X-all_ubuntu24.04_py3.13_pytorch_2.10.0_vllm_0.19.1
 ```
 GPU2 has been added to the container
 
