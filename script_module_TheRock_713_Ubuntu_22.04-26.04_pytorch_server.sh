@@ -208,11 +208,10 @@ install_noble() {
     sudo usermod -aG sudo ${SUDO_USER:-$USER}
 
     # Install the necessary headers and static library files
-    sudo DEBIAN_FRONTEND=noninteractive apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)" --yes
-    sudo DEBIAN_FRONTEND=noninteractive apt install python3-setuptools python3-wheel libpython3.13 --yes
-    sudo DEBIAN_FRONTEND=noninteractive apt install libstdc++-13-dev --yes
-    sudo DEBIAN_FRONTEND=noninteractive apt install git-lfs --yes
-    sudo DEBIAN_FRONTEND=noninteractive apt install libatomic1 libquadmath0 --yes
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install libstdc++-13-dev
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install git-lfs
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install libatomic1 libquadmath0
 
     #sudo apt update && sudo apt install linux-image-6.14.0-1018-oem
 
