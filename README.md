@@ -75,7 +75,7 @@ Install **Ubuntu 22.04.5 LTS**, **Ubuntu 24.04.4 LTS** or **Ubuntu 26.04 LTS** (
 wget https://raw.githubusercontent.com/JoergR75/-therock-7.13-pytorch-docker-cdna-rdna-automated-deployment-preview/refs/heads/main/script_module_TheRock_713_Ubuntu_22.04-26.04_pytorch_server.sh
 ```
 
-<img width="2510" height="479" alt="image" src="https://github.com/user-attachments/assets/880a50ff-9f81-47b4-80d2-2d8e35156a4f" />
+<img width="2351" height="471" alt="image" src="https://github.com/user-attachments/assets/153f3411-79c9-4aa3-b07b-be32781a8e92" />
 
 ### 3️⃣ **Run the Installer**
 ```bash
