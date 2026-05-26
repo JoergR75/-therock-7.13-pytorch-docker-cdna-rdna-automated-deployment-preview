@@ -141,7 +141,7 @@ install_jammy() {
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq ncdu
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq cmake
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq libmsgpack-dev
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq rocm-bandwidth-test
+    #sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq rocm-bandwidth-test
 
     # Add ROCm bandwidth test binary to PATH
     echo 'export PATH="/opt/rocm/bin/rocm_bandwidth_test:$PATH"' >> ~/.bashrc
@@ -236,13 +236,13 @@ EOF
     # Install tools - git, htop, cmake, libmsgpack-dev, ncdu (NCurses Disk Usage utility / df -h) and freeipmi-tools (BMC version read)
 
     source ~/.bashrc
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y git
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y htop
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y freeipmi-tools
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y ncdu
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y cmake
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y libmsgpack-dev
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y rocm-bandwidth-test
+    sudo DEBIAN_FRONTEND=noninteractive apt install -y \
+    git \
+    htop \
+    freeipmi-tools \
+    ncdu \
+    cmake \
+    libmsgpack-dev
 
     # Add ROCm binaries to PATH
     echo 'export PATH="/opt/rocm/bin:$PATH"' >> ~/.bashrc
@@ -258,23 +258,15 @@ EOF
 
     print '\n 📦 Installing PyTorch 2.11 (Stable) for TheRock 7.13, Transformers environment ...\n'
 
-    #python3.13 -m venv .venv
-    #source .venv/bin/activate
-
+    sudo apt update
+    sudo apt install -y python3-pip
     python3 -m pip install --upgrade pip wheel --break-system-packages
     python3 -m pip install \
         --index-url https://repo.amd.com/rocm/whl/gfx120X-all/ \
         "torch==2.11.0+rocm7.13.0" \
         "torchvision==0.26.0+rocm7.13.0" \
         "torchaudio==2.11.0+rocm7.13.0" --break-system-packages
-    pip3 install --upgrade joblib --break-system-packages
-    pip3 install --upgrade setuptools_scm --break-system-packages
-    pip3 install --upgrade transformers --break-system-packages
-    pip3 install --upgrade accelerate --break-system-packages
-    pip3 install --upgrade -U diffusers --break-system-packages
-    pip3 install --upgrade protobuf --break-system-packages
-    pip3 install --upgrade sentencepiece --break-system-packages
-    pip3 install --upgrade datasets --break-system-packages
+    python3 -m pip install --upgrade joblib setuptools_scm transformers accelerate diffusers protobuf sentencepiece datasets --break-system-packages
 }
 
 install_resolute() {
@@ -343,13 +335,13 @@ EOF
     # Install tools - git, htop, cmake, libmsgpack-dev, ncdu (NCurses Disk Usage utility / df -h) and freeipmi-tools (BMC version read)
 
     source ~/.bashrc
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y git
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y htop
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y freeipmi-tools
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y ncdu
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y cmake
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y libmsgpack-dev
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y rocm-bandwidth-test
+    sudo DEBIAN_FRONTEND=noninteractive apt install -y \
+        git \
+        htop \
+        freeipmi-tools \
+        ncdu \
+        cmake \
+        libmsgpack-dev
 
     # Add ROCm binaries to PATH
     echo 'export PATH="/opt/rocm/bin:$PATH"' >> ~/.bashrc
