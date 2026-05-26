@@ -1,4 +1,4 @@
-# ⚙️ Automated TheRock 7.13 Stack + PyTorch (Stable) + Transformers + Docker Setup
+# ⚙️ Automated TheRock 7.13 Stack + PyTorch (Stable) + Transformers + Docker Setup - Preview
 
 [![ROCm](https://img.shields.io/badge/TheRock-7.13-ff6b6b?logo=amd)](https://rocm.docs.amd.com/en/7.13.0-preview/about/release-notes.html)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11%20%28Stable%29-ee4c2c?logo=pytorch)](https://pytorch.org/get-started/locally/)
