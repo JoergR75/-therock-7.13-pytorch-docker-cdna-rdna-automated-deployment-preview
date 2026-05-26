@@ -114,7 +114,9 @@ python3 test.py
 ```
 Expected Output Example:
 
-<img width="1389" height="725" alt="image" src="https://github.com/user-attachments/assets/efc5c5db-3bf1-4f75-b244-f8b605adb650" />
+| 26.04 | 24.04.4 |
+|--------|--------|
+| ![](https://github.com/user-attachments/assets/efc5c5db-3bf1-4f75-b244-f8b605adb650) | ![](https://github.com/user-attachments/assets/c237b408-3ab1-4d37-9ee1-2f8ab24a82c4) |
 
 ⚠️ **Caution:**  
 Make sure **"Re-Size BAR"** is enabled in the **SBIOS**.  
