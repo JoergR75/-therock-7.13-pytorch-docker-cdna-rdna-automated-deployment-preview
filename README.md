@@ -9,18 +9,18 @@
 [![AMD CDNA MI300 Series](https://img.shields.io/badge/AMD-CDNA%20Instint(TM)%20Architecture-8B0000?logo=amd)](https://www.amd.com/en/technologies/cdna.html)
 
 ## 📌 Overview
-The script provisions a fully automated, non-interactive AMD GPU software development environment for AI and HPC software engineering on **Ubuntu 22.04**, **24.04** and **Ubuntu 26.04**, centered on **TheRock 7.13** and **PyTorch** Stable.
 
-At the platform layer, it installs the AMD GPU kernel driver (**amdgpu-dkms**) and the TheRock 7.13 preview runtime, including **HIP**, ensuring compatibility across **CDNA1**, **CDNA2**, **CDNA3** **CDNA4**, **RDNA3**, **RDNA4** GPUs and **Strix APUs**. The script configures user group permissions (video, render, sudo), and kernel headers required for compiling GPU-accelerated native extensions.
+This repository provides a fully automated, non-interactive deployment environment for AMD GPU software development targeting AI and HPC workloads on Ubuntu **22.04**, **24.04**, and **26.04**. The setup is centered on AMD **TheRock 7.13** Preview and the latest stable PyTorch release.
 
-For the AI framework layer, the script installs **PyTorch 2.11 Stable** (**TheRock 7.13 wheels**) directly from the official PyTorch ROCm nightly repository, enabling access to the latest HIP backends, kernel fusion paths, and compiler features. It complements PyTorch with Transformers, Accelerate, Diffusers, Datasets, SentencePiece, and supporting Python build tooling, allowing immediate development, testing, and profiling of modern LLM, diffusion, and data-parallel workloads.
+At the platform layer, the script installs the AMD GPU kernel driver (`amdgpu-dkms`) together with the TheRock 7.13 Preview runtime, including HIP support. The environment is designed to support a broad range of AMD accelerators and graphics architectures, including CDNA1, CDNA2, CDNA3, CDNA4, RDNA3, RDNA4 GPUs, and Strix APUs. The deployment also configures the required system permissions (`video`, `render`, `sudo`) and installs kernel headers necessary for compiling GPU-accelerated native extensions.
 
-The developer toolchain is rounded out with C/C++ build and system utilities required for low-level GPU software engineering and extension development, including **cmake**, **libstdc++ dev headers**, **git** / **git-lfs**, **libmsgpack**, and **rocm-bandwidth-test** for validating PCIe and HBM bandwidth. Runtime observability and system inspection are supported via htop, ncdu, and ROCm diagnostics (rocminfo, rocm-smi, amd-smi).
+For the AI framework layer, the script installs PyTorch 2.11 Stable using TheRock 7.13 wheels from the official PyTorch ROCm nightly repository. This enables access to the latest HIP runtime capabilities, compiler optimizations, and kernel fusion features. The environment is complemented with widely used AI and data-processing libraries, including Transformers, Accelerate, Diffusers, Datasets, and SentencePiece, together with the required Python build tooling for immediate development, testing, benchmarking, and profiling of modern LLM, diffusion, and distributed workloads.
 
-A validation script is generated to verify end-to-end GPU availability, confirming ROCm detection, PyTorch HIP enablement, GPU enumeration, and successful on-device tensor execution.
+The developer toolchain further includes essential C/C++ build utilities and low-level GPU development packages such as `cmake`, `libstdc++` development headers, `git`, `git-lfs`, `libmsgpack`, and `rocm-bandwidth-test` for PCIe and HBM bandwidth validation. Runtime observability and diagnostics are supported through utilities including `htop`, `ncdu`, `rocminfo`, `rocm-smi`, and `amd-smi`.
 
-The setup is fully **non-interactive** and optimized for both **desktop** and **server** deployments. In addition it checks whether ROCm or PyTorch (installed via pip) is already present on the system.
-If an existing ROCm installation is detected, it removes ROCm and related packages to ensure a clean environment. It also **detects** and **uninstalls** any PyTorch packages (including ROCm-specific builds) to prevent version conflicts before proceeding with a fresh installation.
+To validate the installation, the deployment automatically generates a verification script that performs end-to-end GPU checks, including ROCm runtime detection, PyTorch HIP availability, GPU enumeration, and successful on-device tensor execution.
+
+The entire setup process is fully unattended and optimized for both workstation and server deployments. Before installation, the script detects existing ROCm or pip-installed PyTorch environments and removes conflicting packages — including ROCm-specific PyTorch builds — to ensure a clean, reproducible deployment state.
 
 ---
 
