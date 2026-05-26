@@ -156,7 +156,7 @@ Use the container image you need.
 docker pull rocm/vllm:rocm7.13.0_gfx120X-all_ubuntu24.04_py3.13_pytorch_2.10.0_vllm_0.19.1
 ```
 
-<img width="763" height="590" alt="image" src="https://github.com/user-attachments/assets/7e13abbb-73c4-4d95-9204-2f240837c625" />
+<img width="2036" height="812" alt="image" src="https://github.com/user-attachments/assets/f7cd20ad-5730-4616-9eb4-44e87e068720" />
 
 Further vLLM Docker versions for RDNA4 can be verified on Docker Hub:  
 https://hub.docker.com/r/rocm/vllm-dev/tags?name=navi or https://hub.docker.com/r/vllm/vllm-openai-rocm/tags
