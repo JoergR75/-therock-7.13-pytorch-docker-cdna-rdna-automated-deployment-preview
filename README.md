@@ -101,8 +101,8 @@ This script creates a simple diagnostic python file (test.py) to verify that PyT
 What it does:
 
 - Shows the CPU and installed memory
-- Prints the ROCm, PyTorch and Transformers version.
-- Checks if ROCm is available and how many GPUs are detected.
+- Prints the TheRock, PyTorch and Transformers version.
+- Checks if TheRock is available and how many GPUs are detected.
 - Displays the name of the first GPU (if available).
 - Creates two random 3×3 tensors directly on the GPU (if available).
 - Performs a simple tensor addition operation on the GPU.
@@ -114,7 +114,7 @@ python3 test.py
 ```
 Expected Output Example:
 
-<img width="1432" height="724" alt="image" src="https://github.com/user-attachments/assets/79d17eb1-bf35-4807-9ffe-05337e9a279a" />
+<img width="1389" height="725" alt="image" src="https://github.com/user-attachments/assets/efc5c5db-3bf1-4f75-b244-f8b605adb650" />
 
 ⚠️ **Caution:**  
 Make sure **"Re-Size BAR"** is enabled in the **SBIOS**.  
