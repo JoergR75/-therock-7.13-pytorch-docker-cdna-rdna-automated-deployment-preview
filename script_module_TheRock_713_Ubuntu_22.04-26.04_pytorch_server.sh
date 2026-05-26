@@ -20,7 +20,7 @@ exec > >(tee -a "$LOGFILE") 2>&1
 #
 # Kernel Versions Tested:
 #   - Ubuntu 22.04.5: 5.15.0-176
-#   - Ubuntu 24.04.4: 6.8.0-111
+#   - Ubuntu 24.04.4: 6.8.0-117
 #   - Ubuntu 26.04.x: 7.0.0-15
 #
 # Supported Hardware:
