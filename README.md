@@ -70,6 +70,26 @@ Install **Ubuntu 22.04.5 LTS**, **Ubuntu 24.04.4 LTS** or **Ubuntu 26.04 LTS** (
   - When using Linux, you should disable Secure Boot
   - On WRX80 and WRX90 motherboard solutions, make sure SR-IOV is enabled — there are known issues with Ubuntu Linux detecting the network otherwise
 
+- Ubuntu 22.04.5  
+  During installation, it may be required to add `nomodeset` to the GRUB boot parameters to prevent boot hangs.
+
+  In the GRUB menu (for example, at **"Try or Install Ubuntu Server"**):
+  1. Highlight the installation entry
+  2. Press **`e`** to edit the boot parameters
+  3. Locate the line beginning with:
+
+     ```bash
+     linux /casper/vmlinuz
+     ```
+
+  4. Add `nomodeset` before the final `---`:
+
+     ```bash
+     linux /casper/vmlinuz ... quiet splash nomodeset ---
+     ```
+
+  5. Press **Ctrl + X** or **F10** to boot with the updated parameters
+
 ### 2️⃣ **Download the Script from the Repository**
 ```bash
 wget https://raw.githubusercontent.com/JoergR75/-therock-7.13-pytorch-docker-cdna-rdna-automated-deployment-preview/refs/heads/main/script_module_TheRock_713_Ubuntu_22.04-26.04_pytorch_server.sh
