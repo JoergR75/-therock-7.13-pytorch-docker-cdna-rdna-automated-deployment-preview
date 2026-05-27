@@ -19,7 +19,7 @@ exec > >(tee -a "$LOGFILE") 2>&1
 #   - Ubuntu 26.04.x LTS (Resolute Raccoon)
 #
 # Kernel Versions Tested:
-#   - Ubuntu 22.04.5: 5.15.0-176
+#   - Ubuntu 22.04.5: 6.8.0-117
 #   - Ubuntu 24.04.4: 6.14.0-1018-oem
 #   - Ubuntu 26.04.x: 7.0.0-15
 #
@@ -29,7 +29,7 @@ exec > >(tee -a "$LOGFILE") 2>&1
 # SOFTWARE VERSIONS:
 # ---------------------------------------------------------------------------------------------------------------
 # ROCm Platform:         7.13
-# ROCm Release Notes:    https://rocm.docs.amd.com/en/7.13.0-preview/about/release-notes.html    
+# ROCm Release Notes:    https://rocm.docs.amd.com/en/7.13.0-preview/about/release-notes.html
 #
 # PyTorch:               2.11.0+rocm7.13.0
 # Transformers:          5.9.0
@@ -72,12 +72,13 @@ install_focal() {
 }
 
 install_jammy() {
-    print '\nUbuntu 22.04.x (jammy jellyfish) ROCm stack installation method has been set.\n'
-    print '\n ✔️ Checking if ROCm is installed ...\n'
+    print '\nUbuntu 22.04.x (jammy jellyfish) TheRock stack installation method has been set.\n'
+    print '\n ✔️ Checking if ROCm/TheRock is installed ...\n'
 
     if dpkg -l | grep -q rocm; then
-        print '\nROCm detected. Removing ROCm and associated packages ...\n'
+        print '\nROCm detected. Removing ROCm/TheRock and associated packages ...\n'
 
+        sudo apt autoremove -y amdrocm7.13
         sudo apt autoremove -yq rocm-core
         sudo apt autoremove -yq amdgpu-dkms
         sudo rm /etc/apt/sources.list.d/rocm.list
@@ -85,9 +86,9 @@ install_jammy() {
         sudo apt clean all -yq
         sudo apt update
 
-        print '\n ✅ ROCm packages removed successfully.'
+        print '\n ✅ ROCm/TheRock packages removed successfully.'
     else
-        print 'No ROCm installation detected.'
+        print 'No ROCm/TheRock installation detected.'
     fi
 
     print '\n ✔️ Checking for PyTorch packages installed via pip ...\n'
@@ -103,51 +104,52 @@ install_jammy() {
     # Pause before continuing
     read -n1 -r -p "Press any key to continue..." key
 
-    # Download the installer script
-    wget https://repo.radeon.com/amdgpu-install/7.2.2/ubuntu/jammy/amdgpu-install_7.2.2.70202-1_all.deb
-    # install latest headers and static library files necessary for building C++ programs which use libstdc++
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)" -yq
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install python3-setuptools python3-wheel libpython3.10 -yq
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install libstdc++-12-dev -yq
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install git-lfs -yq
-
-    # Install with "default" settings (no interaction)
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq ./amdgpu-install_7.2.2.70202-1_all.deb --allow-downgrades
-
-    # Installing multiple use cases including ROCm 7.2.2, OCL and HIP SDK
-
-    print '\n 📦 Installing ROCm 7.2.2 stack + OCL 2.x environment ...\n'
-
-    sudo DEBIAN_FRONTEND=noninteractive apt-get update
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq amdgpu-dkms rocm
-
-    # Groups setup and ROCm/OCL path in global *.icd file
-    # Add path into global amdocl64*.icd file
-
-    echo "/opt/rocm/lib/libamdocl64.so" | sudo tee /etc/OpenCL/vendors/amdocl64*.icd
-
     # add the user to the sudo group (iportant e.g. to compile vllm, flashattention in a pip environment)
-
-    sudo usermod -a -G video,render,audio ${SUDO_USER:-$USER}
+    sudo usermod -a -G video,render ${SUDO_USER:-$USER}
     sudo usermod -aG sudo ${SUDO_USER:-$USER}
+
+    # Install the necessary headers and static library files
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install libstdc++-13-dev
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install git-lfs
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install libatomic1 libquadmath0
+
+    sudo DEBIAN_FRONTEND=noninteractive apt install -y linux-generic-hwe-22.04
+
+    # Download and install the AMD ROCm GPG key
+
+    sudo mkdir --parents --mode=0755 /etc/apt/keyrings
+
+    # ROCm release signing key
+    wget https://repo.amd.com/rocm/packages/gpg/rocm.gpg -O - | \
+        gpg --dearmor | sudo tee /etc/apt/keyrings/amdrocm.gpg > /dev/null
+
+    sudo tee /etc/apt/sources.list.d/rocm.list << EOF
+    deb [arch=amd64 signed-by=/etc/apt/keyrings/amdrocm.gpg] https://repo.amd.com/rocm/packages/ubuntu2204 stable main
+EOF
+
+    sudo apt update
+
+    print '\n 📦 Installing TheRock 7.13 complete Core SDK including runtimes, compilers, development tools, and dependencies ...\n'
+
+    sudo apt install -y amdrocm7.13-gfx120x
 
     # Install tools - git, htop, cmake, libmsgpack-dev, ncdu (NCurses Disk Usage utility / df -h) and freeipmi-tools (BMC version read)
 
     source ~/.bashrc
-    sudo DEBIAN_FRONTEND=noninteractive apt-get update
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq git
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq htop
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq freeipmi-tools
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq ncdu
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq cmake
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq libmsgpack-dev
-    #sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq rocm-bandwidth-test
+    sudo DEBIAN_FRONTEND=noninteractive apt install -y \
+        git \
+        htop \
+        freeipmi-tools \
+        ncdu \
+        cmake \
+        libmsgpack-dev
 
-    # Add ROCm bandwidth test binary to PATH
-    echo 'export PATH="/opt/rocm/bin/rocm_bandwidth_test:$PATH"' >> ~/.bashrc
+    # Add ROCm binaries to PATH
+    echo 'export PATH="/opt/rocm/bin:$PATH"' >> ~/.bashrc
 
     # Add ROCm libraries to LD_LIBRARY_PATH
-    echo 'export LD_LIBRARY_PATH="/opt/rocm/lib:$LD_LIBRARY_PATH"' >> ~/.bashrc
+    echo 'export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:$LD_LIBRARY_PATH"' >> ~/.bashrc
 
     # Add local user bin to PATH
     echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
@@ -155,19 +157,17 @@ install_jammy() {
     # Apply changes immediately in current shell
     source ~/.bashrc
 
-    print '\n 📦 Installing Pytorch 2.13.x (Preview (Nightly)), Transformers environment ...\n'
+   print '\n 📦 Installing PyTorch 2.11 (Stable) for TheRock 7.13, Transformers environment ...\n'
 
-    python3 -m pip install --upgrade pip --quiet --no-input
-    python3 -m pip install --upgrade pip wheel --quiet --no-input
-    python3 -m pip install joblib --quiet --no-input
-    python3 -m pip install setuptools_scm --quiet --no-input
-    python3 -m pip install --pre torch torchvision --index-url https://download.pytorch.org/whl/nightly/rocm7.2 --no-input
-    python3 -m pip install transformers --quiet --no-input
-    python3 -m pip install accelerate --quiet --no-input
-    python3 -m pip install -U diffusers --quiet --no-input
-    python3 -m pip install protobuf --quiet --no-input
-    python3 -m pip install sentencepiece --quiet --no-input 
-    python3 -m pip install datasets --quiet --no-input
+    sudo apt update
+    sudo apt-get install -y python3-pip
+    python3 -m pip install --upgrade pip wheel
+    python3 -m pip install \
+        --index-url https://repo.amd.com/rocm/whl/gfx120X-all/ \
+        "torch==2.11.0+rocm7.13.0" \
+        "torchvision==0.26.0+rocm7.13.0" \
+        "torchaudio==2.11.0+rocm7.13.0"
+    python3 -m pip install --upgrade joblib setuptools_scm transformers accelerate diffusers protobuf sentencepiece datasets
 }
 
 install_noble() {
@@ -312,15 +312,13 @@ install_resolute() {
     sudo DEBIAN_FRONTEND=noninteractive apt-get -y install git-lfs
     sudo DEBIAN_FRONTEND=noninteractive apt-get -y install libatomic1 libquadmath0
 
-    #sudo apt update && sudo apt install linux-image-6.14.0-1018-oem
-
     # Download and install the AMD ROCm GPG key
     sudo mkdir --parents --mode=0755 /etc/apt/keyrings
     wget https://repo.amd.com/rocm/packages/gpg/rocm.gpg -O - | \
         gpg --dearmor | sudo tee /etc/apt/keyrings/amdrocm.gpg > /dev/null
 
     sudo tee /etc/apt/sources.list.d/rocm.list << EOF
-    deb [arch=amd64 signed-by=/etc/apt/keyrings/amdrocm.gpg] https://repo.amd.com/rocm/packages-multi-arch/ubuntu2404 stable main
+    deb [arch=amd64 signed-by=/etc/apt/keyrings/amdrocm.gpg] https://repo.amd.com/rocm/packages-multi-arch/ubuntu2604 stable main
 EOF
 
     sudo apt update
