@@ -74,21 +74,21 @@ Install **Ubuntu 22.04.5 LTS**, **Ubuntu 24.04.4 LTS** or **Ubuntu 26.04 LTS** (
   During installation, it may be required to add `nomodeset` to the GRUB boot parameters to prevent boot hangs.
 
   In the GRUB menu (for example, at **"Try or Install Ubuntu Server"**):
-  1) Highlight the installation entry
-  2) Press **`e`** to edit the boot parameters
-  3) Locate the line beginning with:
+  - Highlight the installation entry
+  - Press **`e`** to edit the boot parameters
+  - Locate the line beginning with:
 
      ```bash
      linux /casper/vmlinuz
      ```
 
-  4) Add `nomodeset` before the final `---`:
+  - Add `nomodeset` before the final `---`:
 
      ```bash
      linux /casper/vmlinuz ... quiet splash nomodeset ---
      ```
 
-  5) Press **Ctrl + X** or **F10** to boot with the updated parameters
+  - Press **Ctrl + X** or **F10** to boot with the updated parameters
 
 ### 2️⃣ **Download the Script from the Repository**
 ```bash
