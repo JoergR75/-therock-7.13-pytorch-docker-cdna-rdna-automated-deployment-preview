@@ -44,7 +44,6 @@ exec > >(tee -a "$LOGFILE") 2>&1
 #   - ncdu                → NCurses Disk Usage analyzer for efficient storage management
 #   - libmsgpack-dev      → Development package for MessagePack (binary serialization format)
 #   - freeipmi-tools      → Utilities for querying BMC firmware versions and IPMI functions
-#   - rocm-bandwidth-test → Utility to measure and validate host↔GPU and inter-GPU memory bandwidth
 #
 # ---------------------------------------------------------------------------------------------------------------
 # Author:                Joerg Roskowetz
