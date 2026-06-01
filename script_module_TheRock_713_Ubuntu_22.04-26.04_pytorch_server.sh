@@ -48,7 +48,7 @@ exec > >(tee -a "$LOGFILE") 2>&1
 # ---------------------------------------------------------------------------------------------------------------
 # Author:                Joerg Roskowetz
 # Estimated Runtime:     ~15 minutes (depending on system performance and internet speed)
-# Last Updated:          June 1st, 2026
+# Last Updated:          May 26th, 2026
 # ================================================================================================================
 
 # global stdout method
@@ -293,10 +293,11 @@ EOF
 }
 
 install_resolute() {
+
     print '\nUbuntu 26.04.x (resolute raccoon) TheRock stack installation method has been set.\n'
     print '\n ✔️ Checking if ROCm/TheRock is installed ...\n'
 
- if dpkg -l | grep -q rocm; then
+    if dpkg -l | grep -q rocm; then
         print '\nROCm/TheRock detected. Removing ROCm/TheRock and associated packages ...\n'
 
         sudo apt autoremove -y amdrocm7.13
@@ -329,12 +330,22 @@ install_resolute() {
     sudo usermod -a -G video,render ${SUDO_USER:-$USER}
     sudo usermod -aG sudo ${SUDO_USER:-$USER}
 
-    # Install the necessary headers and static library files
-    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
-    #sudo DEBIAN_FRONTEND=noninteractive apt install python3-setuptools python3-wheel libpython3.13 --yes
-    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install libstdc++-13-dev
-    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install git-lfs
-    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install libatomic1 libquadmath0
+    # Install prerequisites
+    sudo DEBIAN_FRONTEND=noninteractive apt update
+    sudo DEBIAN_FRONTEND=noninteractive apt install -y \
+        linux-generic \
+        linux-headers-generic \
+        python3-pip \
+        git \
+        git-lfs \
+        htop \
+        freeipmi-tools \
+        ncdu \
+        cmake \
+        libmsgpack-dev \
+        libstdc++-13-dev \
+        libatomic1 \
+        libquadmath0
 
     # Download and install the AMD ROCm GPG key
     sudo mkdir --parents --mode=0755 /etc/apt/keyrings
@@ -353,40 +364,48 @@ EOF
 
     sudo apt install -y amdrocm7.13
 
-    # Install tools - git, htop, cmake, libmsgpack-dev, ncdu (NCurses Disk Usage utility / df -h) and freeipmi-tools (BMC version read)
+    # Installing complete Core SDK including runtimes, compilers, development tools, and dependencies for GFX ID 120x
 
-    source ~/.bashrc
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y \
-        git \
-        htop \
-        freeipmi-tools \
-        ncdu \
-        cmake \
-        libmsgpack-dev
+    print '\n 📦 Installing TheRock 7.13 complete Core SDK including runtimes, compilers, development tools, and dependencies for GFX ID 120x ...\n'
+
+    sudo apt install -y amdrocm7.13
 
     # Add ROCm binaries to PATH
-    echo 'export PATH="/opt/rocm/bin:$PATH"' >> ~/.bashrc
+    info "Configuring shell environment..."
 
-    # Add ROCm libraries to LD_LIBRARY_PATH
-    echo 'export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:$LD_LIBRARY_PATH"' >> ~/.bashrc
+    grep -qxF 'export PATH="/opt/rocm/bin:$PATH"' ~/.bashrc || \
+        echo 'export PATH="/opt/rocm/bin:$PATH"' >> ~/.bashrc
 
-    # Add local user bin to PATH
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+    grep -qxF 'export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:$LD_LIBRARY_PATH"' ~/.bashrc || \
+        echo 'export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:$LD_LIBRARY_PATH"' >> ~/.bashrc
 
-    # Apply changes immediately in current shell
-    source ~/.bashrc
+    grep -qxF 'export PATH="$HOME/.local/bin:$PATH"' ~/.bashrc || \
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+
+    export PATH="/opt/rocm/bin:$HOME/.local/bin:$PATH"
+    export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:${LD_LIBRARY_PATH:-}"
 
     print '\n 📦 Installing PyTorch 2.11 (Stable) for TheRock 7.13, Transformers environment ...\n'
 
-    sudo apt update
-    sudo apt install -y python3-pip
-    python3 -m pip install --upgrade pip wheel --break-system-packages
+    # Install PyTorch
+    python3 -m pip install --upgrade \
+        pip \
+        wheel \
+        setuptools --break-system-packages
     python3 -m pip install \
         --index-url https://repo.amd.com/rocm/whl/gfx120X-all/ \
         "torch==2.11.0+rocm7.13.0" \
         "torchvision==0.26.0+rocm7.13.0" \
         "torchaudio==2.11.0+rocm7.13.0" --break-system-packages
-    python3 -m pip install --upgrade joblib setuptools_scm transformers accelerate diffusers protobuf sentencepiece datasets --break-system-packages
+    python3 -m pip install --upgrade \
+        accelerate \
+        datasets \
+        diffusers \
+        joblib \
+        protobuf \
+        sentencepiece \
+        setuptools_scm \
+        transformers --break-system-packages
 }
 
 # Function detecting installed Ubuntu version
@@ -416,9 +435,6 @@ if command -v lsb_release >/dev/null 2>&1; then
 else
     print '\nlsb_release command not found. Unable to determine Ubuntu version.\n'
 fi
-
-#echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-#source ~/.bashrc
 
 # create test script
 cd ~
