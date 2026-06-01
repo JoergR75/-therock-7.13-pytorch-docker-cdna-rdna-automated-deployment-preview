@@ -1,5 +1,5 @@
 #!/bin/bash
-LOGFILE="$HOME/installation.log"
+LOGFILE="$HOME/therock713_installation.log"
 exec > >(tee -a "$LOGFILE") 2>&1
 # ================================================================================================================
 # TheRock 7.13 + PyTorch 2.11 (Stable) + Transformers + Docker Setup
@@ -48,10 +48,12 @@ exec > >(tee -a "$LOGFILE") 2>&1
 # ---------------------------------------------------------------------------------------------------------------
 # Author:                Joerg Roskowetz
 # Estimated Runtime:     ~15 minutes (depending on system performance and internet speed)
-# Last Updated:          May 26th, 2026
+# Last Updated:          June 1st, 2026
 # ================================================================================================================
 
 # global stdout method
+set -euo pipefail
+info()  { printf "\n[INFO] %s\n" "$*"; }
 function print () {
     printf "\033[1;32m\t$1\033[1;35m\n"; sleep 4
 }
@@ -170,6 +172,7 @@ EOF
 }
 
 install_noble() {
+
     print '\nUbuntu 24.04.x (noble numbat) TheRock stack installation method has been set.\n'
     print '\n ✔️ Checking if ROCm/TheRock is installed ...\n'
 
@@ -202,17 +205,37 @@ install_noble() {
     # Pause before continuing
     read -n1 -r -p "Press any key to continue..." key
 
+    # Update to OEM kernel 6.14
+    if ! uname -r | grep -q "6.14.0-1018-oem"; then
+
+        sudo apt update
+        sudo apt install -y \
+            linux-image-6.14.0-1018-oem \
+            linux-headers-6.14.0-1018-oem
+
+    else
+        info "OEM kernel 6.14.0-1018 already active."
+    fi
+
     # add the user to the sudo group (iportant e.g. to compile vllm, flashattention in a pip environment)
     sudo usermod -a -G video,render ${SUDO_USER:-$USER}
     sudo usermod -aG sudo ${SUDO_USER:-$USER}
 
-    # Install the necessary headers and static library files
-    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
-    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install libstdc++-13-dev
-    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install git-lfs
-    sudo DEBIAN_FRONTEND=noninteractive apt-get -y install libatomic1 libquadmath0
-
-    #sudo apt update && sudo apt install linux-image-6.14.0-1018-oem
+    # Install prerequisites
+    sudo DEBIAN_FRONTEND=noninteractive apt install -y \
+        "linux-headers-$(uname -r)" \
+        "linux-modules-extra-$(uname -r)" \
+        python3-pip \
+        git \
+        git-lfs \
+        htop \
+        freeipmi-tools \
+        ncdu \
+        cmake \
+        libmsgpack-dev \
+        libstdc++-13-dev \
+        libatomic1 \
+        libquadmath0
 
     # Download and install the AMD ROCm GPG key
     sudo mkdir --parents --mode=0755 /etc/apt/keyrings
@@ -231,40 +254,42 @@ EOF
 
     sudo apt install -y amdrocm7.13
 
-    # Install tools - git, htop, cmake, libmsgpack-dev, ncdu (NCurses Disk Usage utility / df -h) and freeipmi-tools (BMC version read)
-
-    source ~/.bashrc
-    sudo DEBIAN_FRONTEND=noninteractive apt install -y \
-    git \
-    htop \
-    freeipmi-tools \
-    ncdu \
-    cmake \
-    libmsgpack-dev
-
     # Add ROCm binaries to PATH
-    echo 'export PATH="/opt/rocm/bin:$PATH"' >> ~/.bashrc
+    info "Configuring shell environment..."
 
-    # Add ROCm libraries to LD_LIBRARY_PATH
-    echo 'export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:$LD_LIBRARY_PATH"' >> ~/.bashrc
+    grep -qxF 'export PATH="/opt/rocm/bin:$PATH"' ~/.bashrc || \
+        echo 'export PATH="/opt/rocm/bin:$PATH"' >> ~/.bashrc
 
-    # Add local user bin to PATH
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+    grep -qxF 'export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:$LD_LIBRARY_PATH"' ~/.bashrc || \
+        echo 'export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:$LD_LIBRARY_PATH"' >> ~/.bashrc
 
-    # Apply changes immediately in current shell
-    source ~/.bashrc
+    grep -qxF 'export PATH="$HOME/.local/bin:$PATH"' ~/.bashrc || \
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+
+    export PATH="/opt/rocm/bin:$HOME/.local/bin:$PATH"
+    export LD_LIBRARY_PATH="/opt/rocm/lib:/opt/rocm/lib64:${LD_LIBRARY_PATH:-}"
 
     print '\n 📦 Installing PyTorch 2.11 (Stable) for TheRock 7.13, Transformers environment ...\n'
 
-    sudo apt update
-    sudo apt install -y python3-pip
-    python3 -m pip install --upgrade pip wheel --break-system-packages
+    # Install PyTorch
+    python3 -m pip install --upgrade \
+        pip \
+        wheel \
+        setuptools --break-system-packages
     python3 -m pip install \
         --index-url https://repo.amd.com/rocm/whl/gfx120X-all/ \
         "torch==2.11.0+rocm7.13.0" \
         "torchvision==0.26.0+rocm7.13.0" \
         "torchaudio==2.11.0+rocm7.13.0" --break-system-packages
-    python3 -m pip install --upgrade joblib setuptools_scm transformers accelerate diffusers protobuf sentencepiece datasets --break-system-packages
+    python3 -m pip install --upgrade \
+        accelerate \
+        datasets \
+        diffusers \
+        joblib \
+        protobuf \
+        sentencepiece \
+        setuptools_scm \
+        transformers --break-system-packages
 }
 
 install_resolute() {
@@ -512,7 +537,7 @@ print ' ✅ Finished TheRock 7.13 + PyTorch 2.11 (Stable) + Transformers & Docke
 # Post-reboot testing instructions
 printf "\n 🔹 After the reboot, test your installation with:\n"
 printf "  • rocminfo\n"
-printf "  • installation process is stored in $HOME/installation.log\n"
+printf "  • installation process is stored in $HOME/therock713_installation.log\n"
 printf "  • amd-smi\n"
 
 # PyTorch verification
