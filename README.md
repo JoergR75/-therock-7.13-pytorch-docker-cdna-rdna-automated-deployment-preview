@@ -83,7 +83,7 @@ Install **Ubuntu 22.04.5 LTS**, **Ubuntu 24.04.4 LTS** or **Ubuntu 26.04 LTS** (
      linux /casper/vmlinuz
      ```
 
-  - Add `nomodeset` before the final `---`:
+  - Add `quiet splash nomodeset` before the final `---`:
 
      ```bash
      linux /casper/vmlinuz quiet splash nomodeset ---
