@@ -174,9 +174,9 @@ To use vLLM optimized for RDNA4 and CDNA:
 
 Use the container image you need.
 
-**RDNA4** architecture running on Ubuntu 24.04
+**RDNA4** architecture running on Ubuntu 22.04
 ```bash
-docker pull rocm/vllm:rocm7.13.0_gfx120X-all_ubuntu24.04_py3.13_pytorch_2.10.0_vllm_0.19.1
+docker pull vllm/vllm-openai-rocm:v0.22.0
 ```
 
 <img width="2036" height="812" alt="image" src="https://github.com/user-attachments/assets/f7cd20ad-5730-4616-9eb4-44e87e068720" />
